@@ -1,71 +1,57 @@
-const mgrid = (h, w) => {
-  const x = new Array(h).fill(null).map((v, k) => new Array(w).fill(k));
-  const y = new Array(h).fill(null).map((v, k) => new Array(w).fill(null).map((_v, i) => i));
-  return [y, x];
-};
 
-const pow = ::Math.pow;
-
-const sum = m =>
-  m.reduce((s, v) => s + v.reduce((_s, w) => _s + w, 0), 0);
-
-const _mul = (m1, m2) =>
-  m1.slice().map((v, y) => v.slice().map((w, x) => w * m2[y][x]));
-
-const mul = (...matrices) =>
-  (matrices.length ? matrices.filter(Boolean).reduce((s, m) => _mul(s, m)) : null);
-
-const dev = (m, mean) =>
-  m.slice().map((v, y) => v.slice().map((w, x) => w - mean));
-
+function calculateMoment2d(q, p, imageData, meanX=0, meanY=0) {
+  var sum = 0;
+  var width = imageData[0].length;
+  var height = imageData.length;
+  for (var x=0; x<width; x++) {
+    for(var y=0; y<height; y++) {
+      var intensity = imageData[y][x];
+      sum += Math.pow(x-meanX, p) * Math.pow(y-meanY, q) * intensity;
+    }
+  }
+  return sum;
+}
 
 export default function imageMoments(image) {
   // Expects a greyscale image matrix [y][x]
   // @desc https://en.wikipedia.org/wiki/Image_moment
-  const [y, x] = mgrid(25, 20);
   const moments = {};
 
-  const mom = (i, j, fy, fx) =>
-    sum(mul(mul.apply(null, new Array(i).fill(fy)), mul.apply(null, new Array(j).fill(fx)), image));
-
   // Raw or spatial moments
-  const m = (i, j) => mom(i, j, y, x);
-  moments.m00 = m(0, 0); // area or sum of grey level
-  moments.m01 = m(0, 1);
-  moments.m10 = m(1, 0);
-  moments.m11 = m(1, 1);
-  moments.m02 = m(0, 2);
-  moments.m20 = m(2, 0);
-  moments.m12 = m(1, 2);
-  moments.m21 = m(2, 1);
-  moments.m03 = m(0, 3);
-  moments.m30 = m(3, 0);
+  moments.m00 = calculateMoment2d(0, 0, image); // area or sum of grey level
+  moments.m01 = calculateMoment2d(0, 1, image);
+  moments.m10 = calculateMoment2d(1, 0, image);
+  moments.m11 = calculateMoment2d(1, 1, image);
+  moments.m02 = calculateMoment2d(0, 2, image);
+  moments.m20 = calculateMoment2d(2, 0, image);
+  moments.m12 = calculateMoment2d(1, 2, image);
+  moments.m21 = calculateMoment2d(2, 1, image);
+  moments.m03 = calculateMoment2d(0, 3, image);
+  moments.m30 = calculateMoment2d(3, 0, image);
 
   // Centroid
   // @desc point on which it would balance when placed on a needle
   moments.mx = moments.m01 / moments.m00; // mean
   moments.my = moments.m10 / moments.m00; // mean
-  const xMoments = dev(x, moments.mx); // standard deviation
-  const yMoments = dev(y, moments.my); // standard deviation
 
   // Central moments
   // @desc translation invariant
-  const mu = (i, j) => mom(i, j, yMoments, xMoments);
   moments.mu00 = moments.m00;
   // moments.mu01 = mu(0, 1) // should be 0
   // moments.mu10 = mu(1, 0) // should be 0
-  moments.mu11 = mu(1, 1);
-  moments.mu20 = mu(2, 0); // variance
-  moments.mu02 = mu(0, 2); // variance
-  moments.mu21 = mu(2, 1);
-  moments.mu12 = mu(1, 2);
-  moments.mu30 = mu(3, 0);
-  moments.mu03 = mu(0, 3);
+  moments.mu11 = calculateMoment2d(1, 1, image, moments.mx, moments.my);
+  moments.mu20 = calculateMoment2d(2, 0, image, moments.mx, moments.my); // variance
+  moments.mu02 = calculateMoment2d(0, 2, image, moments.mx, moments.my); // variance
+  moments.mu21 = calculateMoment2d(2, 1, image, moments.mx, moments.my);
+  moments.mu12 = calculateMoment2d(1, 2, image, moments.mx, moments.my);
+  moments.mu30 = calculateMoment2d(3, 0, image, moments.mx, moments.my);
+  moments.mu03 = calculateMoment2d(0, 3, image, moments.mx, moments.my);
 
   // Scale invariants
   // @desc translation and scale invariant
+  // these dont exactly match the python
   const nu = (i, j) =>
-    moments[`mu${i}${j}`] / pow(moments.mu00, (1 + (i + j) / 2));
+    moments[`mu${i}${j}`] / Math.pow(moments.mu00, (1 + (i + j) / 2));
   moments.nu11 = nu(1, 1);
   moments.nu12 = nu(1, 2);
   moments.nu21 = nu(2, 1);

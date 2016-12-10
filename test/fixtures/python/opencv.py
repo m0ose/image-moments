@@ -2,7 +2,7 @@
 
 import cv2
 import json
-im = cv2.imread("test/fixtures/sample.png", cv2.CV_LOAD_IMAGE_GRAYSCALE)
+im = cv2.imread("../fudge.png", cv2.CV_LOAD_IMAGE_GRAYSCALE)
 
 #print json.dumps(im.tolist())
 print cv2.moments(im)

@@ -64,5 +64,5 @@ def moments2e(image):
   moments['nu30'] = moments['mu30'] / sum(image)**(3/2+1) # skewness
   return moments
 
-im = cv2.imread("test.png", cv2.CV_LOAD_IMAGE_GRAYSCALE)
+im = cv2.imread("fudge.png", cv2.CV_LOAD_IMAGE_GRAYSCALE)
 print moments2e(im)
