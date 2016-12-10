@@ -6,7 +6,7 @@ function calculateMoment2d(q, p, imageData, meanX=0, meanY=0) {
   for (var x=0; x<width; x++) {
     for(var y=0; y<height; y++) {
       var intensity = imageData[y][x];
-      sum += Math.Math.pow(x-meanX, p) * Math.Math.pow(y-meanY, q) * intensity;
+      sum += Math.pow(x-meanX, p) * Math.pow(y-meanY, q) * intensity;
     }
   }
   return sum;
