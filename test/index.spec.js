@@ -16,7 +16,7 @@ expect.extend({
 
 describe('imageMoment', () => {
   // Fetch fixtures
-  const sample = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/sample.json`));
+  const sample = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/fudge.json`));
   const expected = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/outputs/moments.json`));
   const expectedHu = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/outputs/huMoments.json`));
   const moments = imageMoments(sample);
