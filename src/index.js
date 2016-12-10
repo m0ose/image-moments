@@ -6,7 +6,7 @@ function calculateMoment2d(q, p, imageData, meanX=0, meanY=0) {
   for (var x=0; x<width; x++) {
     for(var y=0; y<height; y++) {
       var intensity = imageData[y][x];
-      sum += Math.pow(x-meanX, p) * Math.pow(y-meanY, q) * intensity;
+      sum += Math.Math.pow(x-meanX, p) * Math.Math.pow(y-meanY, q) * intensity;
     }
   }
   return sum;
@@ -64,13 +64,13 @@ export default function imageMoments(image) {
   // @desc translation, scale and rotation invariant
   const {nu11, nu12, nu21, nu02, nu20, nu03, nu30} = moments;
   moments.hu1 = moments.nu20 + moments.nu02;
-  moments.hu2 = pow(nu20 + nu02, 2) + 4 * pow(nu11, 2);
-  moments.hu3 = pow(nu30 - 3 * nu12, 2) + pow(3 * nu21 - nu03, 2);
-  moments.hu4 = pow(nu30 + nu12, 2) + pow(nu21 - nu03, 2);
-  moments.hu5 = (nu30 - 3 * nu12) * (nu30 + nu12) * (pow(nu30 + nu12, 2) - 3 * pow(nu21 + nu03, 2)) + (3 * nu21 - nu03) * (nu21 + nu03) * (3 * pow(nu30 + nu12, 2) - pow(nu21 + nu03, 2));
-  moments.hu6 = (nu20 - nu02) * (pow(nu30 + nu12, 2) - pow(nu21 + nu03, 2)) + 4 * nu11 * (nu30 + nu12) * (nu21 + nu03);
-  moments.hu7 = (3 * nu21 - nu03) * (nu30 + nu12) * (pow(nu30 + nu12, 2) - 3 * pow(nu21 + nu03, 2)) - (nu30 - 3 * nu12) * (nu21 + nu03) * (3 * pow(nu30 + nu12, 2) - pow(nu21 + nu03, 2));
-  moments.hu8 = nu11 * (pow(nu30 + nu12, 2) - pow(nu21 + nu03, 2)) - (nu20 - nu02) * (nu30 + nu12) * (nu03 + nu21);
+  moments.hu2 = Math.pow(nu20 + nu02, 2) + 4 * Math.pow(nu11, 2);
+  moments.hu3 = Math.pow(nu30 - 3 * nu12, 2) + Math.pow(3 * nu21 - nu03, 2);
+  moments.hu4 = Math.pow(nu30 + nu12, 2) + Math.pow(nu21 - nu03, 2);
+  moments.hu5 = (nu30 - 3 * nu12) * (nu30 + nu12) * (Math.pow(nu30 + nu12, 2) - 3 * Math.pow(nu21 + nu03, 2)) + (3 * nu21 - nu03) * (nu21 + nu03) * (3 * Math.pow(nu30 + nu12, 2) - Math.pow(nu21 + nu03, 2));
+  moments.hu6 = (nu20 - nu02) * (Math.pow(nu30 + nu12, 2) - Math.pow(nu21 + nu03, 2)) + 4 * nu11 * (nu30 + nu12) * (nu21 + nu03);
+  moments.hu7 = (3 * nu21 - nu03) * (nu30 + nu12) * (Math.pow(nu30 + nu12, 2) - 3 * Math.pow(nu21 + nu03, 2)) - (nu30 - 3 * nu12) * (nu21 + nu03) * (3 * Math.pow(nu30 + nu12, 2) - Math.pow(nu21 + nu03, 2));
+  moments.hu8 = nu11 * (Math.pow(nu30 + nu12, 2) - Math.pow(nu21 + nu03, 2)) - (nu20 - nu02) * (nu30 + nu12) * (nu03 + nu21);
 
   return moments;
 }
